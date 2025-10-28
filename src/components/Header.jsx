@@ -20,10 +20,10 @@ export default function Header() {
       boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
       transition: 'all 0.3s ease'
     }}>
-      {/* Theme toggle button */}
+      {/* Theme toggle button - Desktop only */}
       <button
         onClick={toggleTheme}
-        className="position-absolute"
+        className="position-absolute d-none d-md-block"
         aria-label={darkMode ? 'Activer le mode clair' : 'Activer le mode sombre'}
         style={{
           top: '20px',
@@ -84,7 +84,7 @@ export default function Header() {
             animation: 'fadeIn 0.8s ease-in'
           }} 
         />
-        <div className="d-flex flex-column flex-md-row align-items-center justify-content-center" style={{gap: '25px'}}>
+        <div className="d-flex flex-column flex-md-row align-items-center justify-content-center position-relative" style={{gap: '25px', width: '100%'}}>
           <Link 
             className="text-decoration-none fw-bold fs-5 px-4 py-3 text-center" 
             style={{
@@ -129,6 +129,35 @@ export default function Header() {
           >
             📰 Matériel & News
           </Link>
+          
+          {/* Theme toggle button - Mobile only */}
+          <button
+            onClick={toggleTheme}
+            className="d-md-none position-absolute"
+            aria-label={darkMode ? 'Activer le mode clair' : 'Activer le mode sombre'}
+            style={{
+              top: '0',
+              right: '0',
+              background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.1)',
+              border: darkMode ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(45,80,22,0.2)',
+              borderRadius: '50%',
+              width: '45px',
+              height: '45px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              fontSize: '20px'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'scale(1.1)';
+              e.target.style.background = darkMode ? 'rgba(255,255,255,0.2)' : 'rgba(45,80,22,0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.background = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.1)';
+            }}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
         </div>
       </div>
     </nav>
