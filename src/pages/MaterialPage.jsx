@@ -59,7 +59,7 @@ export default function MaterialPage() {
   }, [searchTerm]);
 
   return (
-    <div className="container mt-5">
+    <section className="container mt-5" aria-label="Recherche d'informations golf">
       <h2 className="text-center mb-4" style={{color: '#2d5016', fontWeight: '700'}}>📰 Matériel & News</h2>
       
       <div className="mb-5">
@@ -77,7 +77,7 @@ export default function MaterialPage() {
       
       <div className="row">
         {results.map((item, index) => (
-          <div key={index} className="col-12 col-md-6 col-lg-4 mb-4">
+          <article key={index} className="col-12 col-md-6 col-lg-4 mb-4" style={{animation: `fadeIn 0.5s ease-out ${index * 0.08}s forwards`, opacity: 0}}>
             <div className="card border-0 shadow-sm h-100" style={{cursor: 'pointer', transition: 'all 0.3s', borderRadius: '15px'}} onClick={() => setSelectedArticle(item)} onMouseEnter={(e) => {e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';}} onMouseLeave={(e) => {e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';}}>
               <div className="card-body p-4">
                 <span className="badge mb-3" style={{backgroundColor: '#2d5016', borderRadius: '20px', padding: '8px 15px'}}>{item.type}</span>
@@ -85,7 +85,7 @@ export default function MaterialPage() {
                 <p className="card-text text-muted">{item.description}</p>
               </div>
             </div>
-          </div>
+          </article>
         ))}
         {searchTerm && !loading && results.length === 0 && (
           <div className="col-12">
@@ -111,6 +111,6 @@ export default function MaterialPage() {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }

@@ -9,7 +9,6 @@ export default function HomePage() {
     fetch('https://jsonplaceholder.typicode.com/posts')
       .then(resp => resp.json())
       .then(data => {
-        console.log('Données API récupérées:', data);
         const golfNews = data.slice(0, 12).map((post, index) => ({
           id: post.id,
           title: [
@@ -57,44 +56,43 @@ export default function HomePage() {
           date: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toLocaleDateString('fr-FR')
         }));
         setNews(golfNews);
-        console.log('Articles transformés:', golfNews);
         setLoading(false);
       });
   }, []);
 
   return (
-    <div className="container mt-4">
+    <section className="container mt-4" aria-label="Actualités golf">
 
       
       {loading ? (
         <p className="text-center">Chargement des actualités...</p>
       ) : (
         <div className="row">
-          {news.map(article => (
-            <div key={article.id} className="col-12 col-sm-6 col-lg-4 mb-4">
-              <div className="card h-100 border-0 shadow-sm" style={{cursor: 'pointer', transition: 'all 0.3s', borderRadius: '15px'}} onClick={() => setSelectedArticle(article)} onMouseEnter={(e) => {e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';}} onMouseLeave={(e) => {e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';}}>
-                <img src={article.image} className="card-img-top" alt={article.title} style={{height: '220px', objectFit: 'cover', borderRadius: '15px 15px 0 0'}} />
+          {news.map((article, index) => (
+            <article key={article.id} className="col-12 col-sm-6 col-lg-4 mb-4" style={{animation: `fadeIn 0.6s ease-out ${index * 0.1}s forwards`, opacity: 0}}>
+              <div className="card h-100 border-0 shadow-sm" style={{cursor: 'pointer', transition: 'all 0.3s', borderRadius: '15px'}} onClick={() => setSelectedArticle(article)} onMouseEnter={(e) => {e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';}} onMouseLeave={(e) => {e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';}} role="button" tabIndex="0" aria-label={`Lire l'article: ${article.title}`}>
+                <img src={article.image} className="card-img-top" alt={`Image illustrant: ${article.title}`} style={{height: '220px', objectFit: 'cover', borderRadius: '15px 15px 0 0'}} loading="lazy" />
                 <div className="card-body p-4">
                   <h5 className="card-title" style={{color: '#2d5016', fontWeight: '600'}}>{article.title}</h5>
                   <p className="card-text text-muted">{article.summary}</p>
                   <small className="text-muted">{article.date}</small>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       )}
       
       {selectedArticle && (
-        <div className="modal show d-block" style={{backgroundColor: 'rgba(0,0,0,0.5)'}}>
-          <div className="modal-dialog modal-lg modal-dialog-centered">
+        <div className="modal show d-block" style={{backgroundColor: 'rgba(0,0,0,0.5)', animation: 'fadeIn 0.3s ease-out'}}>
+          <div className="modal-dialog modal-lg modal-dialog-centered" style={{animation: 'fadeIn 0.4s ease-out'}}>
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">{selectedArticle.title}</h5>
                 <button type="button" className="btn-close" onClick={() => setSelectedArticle(null)}></button>
               </div>
               <div className="modal-body">
-                <img src={selectedArticle.image} className="img-fluid mb-3" alt={selectedArticle.title} />
+                <img src={selectedArticle.image} className="img-fluid mb-3" alt={`Image illustrant: ${selectedArticle.title}`} loading="lazy" />
                 <p>{selectedArticle.summary}</p>
                 <small className="text-muted">{selectedArticle.date}</small>
               </div>
@@ -102,6 +100,6 @@ export default function HomePage() {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 }
