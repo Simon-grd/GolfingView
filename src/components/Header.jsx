@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 import logo from '../Logo_GolfingView.svg';
 
 export default function Header() {
   const { darkMode, toggleTheme } = useTheme();
+  const { isLoggedIn } = useAuth();
 
   return (
     <nav className="p-4 p-md-5 d-flex flex-column align-items-center position-relative overflow-hidden" style={{
@@ -13,35 +15,7 @@ export default function Header() {
       boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
       transition: 'all 0.3s ease'
     }}>
-      {/* Theme toggle button - Desktop only */}
-      <button
-        onClick={toggleTheme}
-        className="position-absolute d-none d-md-block"
-        aria-label={darkMode ? 'Activer le mode clair' : 'Activer le mode sombre'}
-        style={{
-          top: '20px',
-          right: '20px',
-          background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.1)',
-          border: darkMode ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(45,80,22,0.2)',
-          borderRadius: '50%',
-          width: '50px',
-          height: '50px',
-          cursor: 'pointer',
-          transition: 'all 0.3s ease',
-          fontSize: '24px',
-          zIndex: 10
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.transform = 'scale(1.1)';
-          e.target.style.background = darkMode ? 'rgba(255,255,255,0.2)' : 'rgba(45,80,22,0.2)';
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.transform = 'scale(1)';
-          e.target.style.background = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.1)';
-        }}
-      >
-        {darkMode ? '☀️' : '🌙'}
-      </button>
+
 
       {/* Decorative elements */}
       <div style={{
@@ -70,11 +44,13 @@ export default function Header() {
           src={logo} 
           alt="Logo" 
           className="logo mb-4" 
+          onClick={() => window.location.reload()}
           style={{
             height: '100px', 
             width: 'auto', 
             filter: darkMode ? 'drop-shadow(0 4px 8px rgba(255,255,255,0.2)) brightness(1.2)' : 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))',
-            animation: 'fadeIn 0.8s ease-in'
+            animation: 'fadeIn 0.8s ease-in',
+            cursor: 'pointer'
           }} 
         />
         <div className="d-flex flex-column flex-md-row align-items-center justify-content-center" style={{gap: '25px'}}>
@@ -122,56 +98,32 @@ export default function Header() {
           >
             Matériel & News
           </Link>
-          <Link 
-            className="text-decoration-none fw-bold fs-5 px-4 py-3 text-center" 
-            style={{
-              color: darkMode ? '#ffffff' : '#000000',
-              transition: 'all 0.3s ease',
-              borderRadius: '12px',
-              background: 'transparent',
-              border: '1px solid transparent'
-            }} 
-            onMouseEnter={(e) => {
-              e.target.style.background = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.08)';
-              e.target.style.border = darkMode ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(45,80,22,0.15)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'transparent';
-              e.target.style.border = '1px solid transparent';
-            }}
-            to="/signup"
-            aria-label="Créer un compte"
-          >
-            Inscription
-          </Link>
+          {!isLoggedIn && (
+            <Link 
+              className="text-decoration-none fw-bold fs-5 px-4 py-3 text-center" 
+              style={{
+                color: darkMode ? '#ffffff' : '#000000',
+                transition: 'all 0.3s ease',
+                borderRadius: '12px',
+                background: 'transparent',
+                border: '1px solid transparent'
+              }} 
+              onMouseEnter={(e) => {
+                e.target.style.background = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.08)';
+                e.target.style.border = darkMode ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(45,80,22,0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'transparent';
+                e.target.style.border = '1px solid transparent';
+              }}
+              to="/signup"
+              aria-label="Créer un compte"
+            >
+              Inscription
+            </Link>
+          )}
           
-          {/* Theme toggle button - Mobile only */}
-          <button
-            onClick={toggleTheme}
-            className="d-md-none"
-            aria-label={darkMode ? 'Activer le mode clair' : 'Activer le mode sombre'}
-            style={{
-              background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.1)',
-              border: darkMode ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(45,80,22,0.2)',
-              borderRadius: '50%',
-              width: '45px',
-              height: '45px',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              fontSize: '20px',
-              marginLeft: 'auto'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = 'scale(1.1)';
-              e.target.style.background = darkMode ? 'rgba(255,255,255,0.2)' : 'rgba(45,80,22,0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = 'scale(1)';
-              e.target.style.background = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.1)';
-            }}
-          >
-            {darkMode ? '☀️' : '🌙'}
-          </button>
+
         </div>
       </div>
     </nav>

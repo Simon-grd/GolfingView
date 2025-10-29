@@ -97,14 +97,14 @@ export default function MaterialPage() {
 
   return (
     <section className="container mt-5" aria-label="Recherche d'informations golf">
-      <h2 className="text-center mb-4" style={{color: '#2d5016', fontWeight: '700'}}>📰 Matériel & News</h2>
+      <h2 className="text-center mb-4" style={{color: darkMode ? '#ffffff' : '#2d5016', fontWeight: '700'}}>Matériel & News</h2>
       
       <div className="mb-4">
         <input 
           type="text" 
           className="form-control border-0 shadow-sm" 
           style={{borderRadius: '25px', padding: '15px 25px', fontSize: '16px'}}
-          placeholder="Rechercher des informations golf..."
+          placeholder="Rechercher des informations..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />

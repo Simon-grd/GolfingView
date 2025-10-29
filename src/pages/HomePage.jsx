@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function HomePage() {
+  const { darkMode } = useTheme();
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedArticle, setSelectedArticle] = useState(null);
@@ -63,7 +65,7 @@ export default function HomePage() {
 
   return (
     <section className="container mt-4" aria-label="Actualités golf">
-
+      <h2 className="mb-4" style={{color: darkMode ? '#ffffff' : '#2d5016', fontWeight: '700'}}>Les dernières actus</h2>
       
       {loading ? (
         <p className="text-center">Chargement des actualités...</p>

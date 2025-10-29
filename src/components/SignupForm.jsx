@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function SignupForm() {
   const { darkMode } = useTheme();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
     firstName: '',
-    lastName: ''
+    lastName: '',
+    phone: '',
+    handicap: '',
+    favoriteClub: ''
   });
 
   const handleChange = (e) => {
@@ -26,9 +31,25 @@ export default function SignupForm() {
       alert('Les mots de passe ne correspondent pas');
       return;
     }
-    console.log('Inscription:', formData);
+    
+    const userData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      handicap: formData.handicap,
+      favoriteClub: formData.favoriteClub,
+      password: formData.password
+    };
+    
+    // Sauvegarder dans la liste des utilisateurs
+    const savedUsers = JSON.parse(localStorage.getItem('golfingview_users') || '[]');
+    savedUsers.push(userData);
+    localStorage.setItem('golfingview_users', JSON.stringify(savedUsers));
+    
+    login(userData);
     alert('Compte créé avec succès !');
-    navigate('/');
+    navigate('/profile');
   };
 
   return (
@@ -186,7 +207,7 @@ export default function SignupForm() {
                   />
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-3">
                   <input
                     type="password"
                     name="confirmPassword"
@@ -202,13 +223,61 @@ export default function SignupForm() {
                       borderRadius: '12px',
                       transition: 'all 0.3s ease'
                     }}
-                    onFocus={(e) => {
-                      e.target.style.border = darkMode ? '1px solid rgba(255,255,255,0.3)' : '1px solid rgba(45,80,22,0.3)';
-                      e.target.style.boxShadow = darkMode ? '0 0 10px rgba(255,255,255,0.1)' : '0 0 10px rgba(45,80,22,0.1)';
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <input
+                    type="tel"
+                    name="phone"
+                    className="form-control"
+                    placeholder="Téléphone (optionnel)"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    style={{
+                      background: darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(45,80,22,0.05)',
+                      border: darkMode ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(45,80,22,0.15)',
+                      color: darkMode ? '#ffffff' : '#000000',
+                      borderRadius: '12px',
+                      transition: 'all 0.3s ease'
                     }}
-                    onBlur={(e) => {
-                      e.target.style.border = darkMode ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(45,80,22,0.15)';
-                      e.target.style.boxShadow = 'none';
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <input
+                    type="number"
+                    name="handicap"
+                    className="form-control"
+                    placeholder="Handicap (optionnel)"
+                    value={formData.handicap}
+                    onChange={handleChange}
+                    min="0"
+                    max="54"
+                    style={{
+                      background: darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(45,80,22,0.05)',
+                      border: darkMode ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(45,80,22,0.15)',
+                      color: darkMode ? '#ffffff' : '#000000',
+                      borderRadius: '12px',
+                      transition: 'all 0.3s ease'
+                    }}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <input
+                    type="text"
+                    name="favoriteClub"
+                    className="form-control"
+                    placeholder="Club favori (optionnel)"
+                    value={formData.favoriteClub}
+                    onChange={handleChange}
+                    style={{
+                      background: darkMode ? 'rgba(255,255,255,0.08)' : 'rgba(45,80,22,0.05)',
+                      border: darkMode ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(45,80,22,0.15)',
+                      color: darkMode ? '#ffffff' : '#000000',
+                      borderRadius: '12px',
+                      transition: 'all 0.3s ease'
                     }}
                   />
                 </div>
