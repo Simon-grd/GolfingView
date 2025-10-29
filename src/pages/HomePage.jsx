@@ -6,58 +6,59 @@ export default function HomePage() {
   const [selectedArticle, setSelectedArticle] = useState(null);
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-      .then(resp => resp.json())
-      .then(data => {
-        const golfNews = data.slice(0, 12).map((post, index) => ({
-          id: post.id,
-          title: [
-            'Nouveau record au Masters d\'Augusta',
-            'Ouverture du Golf de Versailles rénové',
-            'Championnat de France amateur 2024',
-            'Innovation technologique dans les clubs',
-            'Tournoi caritatif à Saint-Tropez',
-            'Formation jeunes golfeurs en Bretagne',
-            'Tiger Woods annonce son retour',
-            'Nouveau parcours écologique en Provence',
-            'Ryder Cup 2024 : préparatifs en cours',
-            'Open de France : victoire surprise',
-            'Golf féminin : nouveau record d\'audience',
-            'Technologie 3D pour l\'analyse du swing'
-          ][index],
-          summary: [
-            'Un joueur français établit un nouveau record sur le parcours mythique d\'Augusta.',
-            'Après 2 ans de travaux, le prestigieux golf de Versailles rouvre ses portes.',
-            'Les inscriptions sont ouvertes pour le championnat national amateur.',
-            'Les nouveaux drivers intègrent l\'intelligence artificielle pour améliorer le swing.',
-            'Plus de 100 000€ récoltés lors du tournoi caritatif organisé sur la Côte d\'Azur.',
-            'Un programme spécial initie 200 jeunes au golf dans les écoles bretonnes.',
-            'La légende du golf confirme sa participation au prochain tournoi majeur.',
-            'Un parcours respectueux de l\'environnement ouvre ses portes près d\'Aix-en-Provence.',
-            'L\'équipe européenne se prépare intensivement pour défendre son titre.',
-            'Un amateur français crée la sensation en remportant l\'Open de France.',
-            'Le golf féminin bat tous les records de téléspectateurs cette saison.',
-            'Une nouvelle technologie révolutionne l\'analyse biomecanique du swing.'
-          ][index],
-          image: [
-            'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=400&h=250&fit=crop&q=80',
-            'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop&q=80'
-          ][index],
-          date: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toLocaleDateString('fr-FR')
-        }));
-        setNews(golfNews);
-        setLoading(false);
-      });
+    const golfTitles = [
+      'Nouveau record au Masters d\'Augusta',
+      'Ouverture du Golf de Versailles rénové',
+      'Championnat de France amateur 2024',
+      'Innovation technologique dans les clubs',
+      'Tournoi caritatif à Saint-Tropez',
+      'Formation jeunes golfeurs en Bretagne',
+      'Tiger Woods annonce son retour',
+      'Nouveau parcours écologique en Provence',
+      'Ryder Cup 2024 : préparatifs en cours',
+      'Open de France : victoire surprise',
+      'Golf féminin : nouveau record d\'audience',
+      'Technologie 3D pour l\'analyse du swing'
+    ];
+    const summaries = [
+      'Un joueur français établit un nouveau record sur le parcours mythique d\'Augusta.',
+      'Après 2 ans de travaux, le prestigieux golf de Versailles rouvre ses portes.',
+      'Les inscriptions sont ouvertes pour le championnat national amateur.',
+      'Les nouveaux drivers intègrent l\'intelligence artificielle pour améliorer le swing.',
+      'Plus de 100 000€ récoltés lors du tournoi caritatif organisé sur la Côte d\'Azur.',
+      'Un programme spécial initie 200 jeunes au golf dans les écoles bretonnes.',
+      'La légende du golf confirme sa participation au prochain tournoi majeur.',
+      'Un parcours respectueux de l\'environnement ouvre ses portes près d\'Aix-en-Provence.',
+      'L\'équipe européenne se prépare intensivement pour défendre son titre.',
+      'Un amateur français crée la sensation en remportant l\'Open de France.',
+      'Le golf féminin bat tous les records de téléspectateurs cette saison.',
+      'Une nouvelle technologie révolutionne l\'analyse biomecanique du swing.'
+    ];
+    const images = [
+      'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1593111774240-d529f12cf4bb?w=400&h=250&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop&q=80'
+    ];
+    
+    const golfNews = Array.from({length: 12}, (_, index) => ({
+      id: index + 1,
+      title: golfTitles[index],
+      summary: summaries[index],
+      image: images[index],
+      date: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toLocaleDateString('fr-FR')
+    }));
+    
+    setNews(golfNews);
+    setLoading(false);
   }, []);
 
   return (

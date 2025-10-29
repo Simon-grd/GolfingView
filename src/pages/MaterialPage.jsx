@@ -9,35 +9,46 @@ export default function MaterialPage() {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState([]);
 
-  const golfContent = {
-    'matériel': [
-      { title: 'Nouveaux drivers 2024', description: 'Découvrez les derniers drivers avec technologie IA', type: 'Matériel' },
-      { title: 'Chaussures de golf imperméables', description: 'Les meilleures chaussures pour jouer par temps humide', type: 'Matériel' },
-      { title: 'Putters haute précision', description: 'Nouvelle gamme de putters pour améliorer votre jeu court', type: 'Matériel' },
-      { title: 'Sacs de golf connectés', description: 'Sacs intelligents avec GPS intégré et suivi des statistiques', type: 'Matériel' },
-      { title: 'Balles de golf premium', description: 'Balles haute performance pour tous les niveaux', type: 'Matériel' }
-    ],
-    'news': [
-      { title: 'Tournoi Masters Augusta', description: 'Résultats et highlights du dernier tournoi', type: 'Actualité' },
-      { title: 'Nouveau parcours en France', description: 'Ouverture d\'un parcours 18 trous en Normandie', type: 'Actualité' },
-      { title: 'Ryder Cup 2024', description: 'Préparatifs et équipes sélectionnées pour la compétition', type: 'Actualité' },
-      { title: 'Golf féminin en progression', description: 'Augmentation de 25% des licenciées cette année', type: 'Actualité' },
-      { title: 'Championnat européen junior', description: 'Les jeunes talents français brillent en Europe', type: 'Actualité' }
-    ],
-    'technique': [
-      { title: 'Améliorer son swing', description: 'Conseils pour perfectionner votre technique', type: 'Technique' },
-      { title: 'Putting de précision', description: 'Techniques pour réussir vos putts courts', type: 'Technique' },
-      { title: 'Gestion du parcours', description: 'Stratégies pour optimiser votre score', type: 'Technique' },
-      { title: 'Sortie de bunker', description: 'Maîtrisez les coups depuis les obstacles de sable', type: 'Technique' },
-      { title: 'Jeu par vent fort', description: 'Adaptez votre jeu aux conditions météorologiques', type: 'Technique' }
-    ],
-    'parcours': [
-      { title: 'Golf de Versailles', description: 'Parcours prestigieux aux portes de Paris', type: 'Parcours' },
-      { title: 'Golf du Château', description: 'Parcours technique en forêt', type: 'Parcours' },
-      { title: 'Golf de Biarritz', description: 'Parcours en bord de mer avec vue océanique', type: 'Parcours' },
-      { title: 'Golf des Alpes', description: 'Parcours de montagne avec dénivelés spectaculaires', type: 'Parcours' },
-      { title: 'Golf de Bordeaux', description: 'Parcours au cœur des vignobles bordelais', type: 'Parcours' }
-    ]
+  const [articles, setArticles] = useState([]);
+
+  const fetchArticles = async () => {
+    try {
+      const golfTypes = ['Matériel', 'Actualité', 'Technique', 'Parcours'];
+      const golfTitles = [
+        'Nouveaux drivers 2024', 'Chaussures imperméables', 'Putters précision', 'Sacs connectés',
+        'Tournoi Masters', 'Nouveau parcours France', 'Ryder Cup 2024', 'Golf féminin',
+        'Améliorer son swing', 'Putting précision', 'Gestion parcours', 'Sortie bunker',
+        'Golf de Versailles', 'Golf du Château', 'Golf de Biarritz', 'Golf des Alpes'
+      ];
+      const descriptions = [
+        'Découvrez les derniers drivers avec technologie IA',
+        'Les meilleures chaussures pour jouer par temps humide',
+        'Nouvelle gamme de putters pour améliorer votre jeu court',
+        'Sacs intelligents avec GPS intégré et suivi des statistiques',
+        'Résultats et highlights du dernier tournoi',
+        'Ouverture d\'un parcours 18 trous en Normandie',
+        'Préparatifs et équipes sélectionnées pour la compétition',
+        'Augmentation de 25% des licenciées cette année',
+        'Conseils pour perfectionner votre technique',
+        'Techniques pour réussir vos putts courts',
+        'Stratégies pour optimiser votre score',
+        'Maîtrisez les coups depuis les obstacles de sable',
+        'Parcours prestigieux aux portes de Paris',
+        'Parcours technique en forêt',
+        'Parcours en bord de mer avec vue océanique',
+        'Parcours de montagne avec dénivelés spectaculaires'
+      ];
+      
+      return Array.from({length: 16}, (_, index) => ({
+        id: index + 1,
+        title: golfTitles[index],
+        description: descriptions[index],
+        type: golfTypes[index % 4]
+      }));
+    } catch (error) {
+      console.error('Erreur lors du chargement des articles:', error);
+      return [];
+    }
   };
 
   const filterTypes = [
@@ -56,43 +67,33 @@ export default function MaterialPage() {
   };
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      let searchResults = [];
-      
-      // Si des filtres sont sélectionnés, filtrer par type
-      if (selectedFilters.length > 0) {
-        Object.values(golfContent).flat().forEach(item => {
-          if (selectedFilters.includes(item.type)) {
-            searchResults.push(item);
-          }
-        });
-      } else if (searchTerm) {
-        // Recherche textuelle
-        Object.entries(golfContent).forEach(([category, items]) => {
-          if (category.includes(searchTerm.toLowerCase()) || 
-              items.some(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                item.description.toLowerCase().includes(searchTerm.toLowerCase()))) {
-            searchResults.push(...items);
-          }
-        });
-      } else {
-        // Afficher tous les résultats par défaut
-        searchResults = Object.values(golfContent).flat();
-      }
-      
-      // Appliquer la recherche textuelle si nécessaire
-      if (searchTerm && selectedFilters.length > 0) {
-        searchResults = searchResults.filter(item => 
-          item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.description.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-      
-      setResults(searchResults);
+    const loadArticles = async () => {
+      setLoading(true);
+      const fetchedArticles = await fetchArticles();
+      setArticles(fetchedArticles);
       setLoading(false);
-    }, 300);
-  }, [searchTerm, selectedFilters]);
+    };
+    loadArticles();
+  }, []);
+
+  useEffect(() => {
+    let searchResults = [...articles];
+    
+    // Filtrer par type si des filtres sont sélectionnés
+    if (selectedFilters.length > 0) {
+      searchResults = searchResults.filter(item => selectedFilters.includes(item.type));
+    }
+    
+    // Filtrer par terme de recherche
+    if (searchTerm) {
+      searchResults = searchResults.filter(item => 
+        item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    setResults(searchResults);
+  }, [searchTerm, selectedFilters, articles]);
 
   return (
     <section className="container mt-5" aria-label="Recherche d'informations golf">
