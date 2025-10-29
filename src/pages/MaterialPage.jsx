@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function MaterialPage() {
+  const { darkMode } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
   const golfContent = {
     'matériel': [
@@ -37,32 +40,65 @@ export default function MaterialPage() {
     ]
   };
 
+  const filterTypes = [
+    { key: 'Matériel', label: '🏌️ Matériel', color: '#2d5016' },
+    { key: 'Actualité', label: '📰 News', color: '#1a5490' },
+    { key: 'Technique', label: '🎯 Technique', color: '#8b4513' },
+    { key: 'Parcours', label: '🏞️ Parcours', color: '#228b22' }
+  ];
+
+  const toggleFilter = (filterKey) => {
+    setSelectedFilters(prev => 
+      prev.includes(filterKey) 
+        ? prev.filter(f => f !== filterKey)
+        : [...prev, filterKey]
+    );
+  };
+
   useEffect(() => {
-    if (!searchTerm) {
-      setResults([]);
-      return;
-    }
-    
     setLoading(true);
     setTimeout(() => {
-      const searchResults = [];
-      Object.entries(golfContent).forEach(([category, items]) => {
-        if (category.includes(searchTerm.toLowerCase()) || 
-            items.some(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                              item.description.toLowerCase().includes(searchTerm.toLowerCase()))) {
-          searchResults.push(...items);
-        }
-      });
+      let searchResults = [];
+      
+      // Si des filtres sont sélectionnés, filtrer par type
+      if (selectedFilters.length > 0) {
+        Object.values(golfContent).flat().forEach(item => {
+          if (selectedFilters.includes(item.type)) {
+            searchResults.push(item);
+          }
+        });
+      } else if (searchTerm) {
+        // Recherche textuelle
+        Object.entries(golfContent).forEach(([category, items]) => {
+          if (category.includes(searchTerm.toLowerCase()) || 
+              items.some(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                item.description.toLowerCase().includes(searchTerm.toLowerCase()))) {
+            searchResults.push(...items);
+          }
+        });
+      } else {
+        // Afficher tous les résultats par défaut
+        searchResults = Object.values(golfContent).flat();
+      }
+      
+      // Appliquer la recherche textuelle si nécessaire
+      if (searchTerm && selectedFilters.length > 0) {
+        searchResults = searchResults.filter(item => 
+          item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+      
       setResults(searchResults);
       setLoading(false);
-    }, 500);
-  }, [searchTerm]);
+    }, 300);
+  }, [searchTerm, selectedFilters]);
 
   return (
     <section className="container mt-5" aria-label="Recherche d'informations golf">
       <h2 className="text-center mb-4" style={{color: '#2d5016', fontWeight: '700'}}>📰 Matériel & News</h2>
       
-      <div className="mb-5">
+      <div className="mb-4">
         <input 
           type="text" 
           className="form-control border-0 shadow-sm" 
@@ -71,6 +107,40 @@ export default function MaterialPage() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+      </div>
+
+      {/* Filtres */}
+      <div className="mb-5">
+        <div className="d-flex flex-wrap gap-2 justify-content-center">
+          {filterTypes.map(filter => (
+            <button
+              key={filter.key}
+              className="btn border-0"
+              style={{
+                backgroundColor: selectedFilters.includes(filter.key) ? filter.color : (darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'),
+                color: selectedFilters.includes(filter.key) ? '#ffffff' : (darkMode ? '#ffffff' : '#000000'),
+                borderRadius: '20px',
+                padding: '8px 16px',
+                fontSize: '14px',
+                fontWeight: '500',
+                transition: 'all 0.3s ease'
+              }}
+              onClick={() => toggleFilter(filter.key)}
+              onMouseEnter={(e) => {
+                if (!selectedFilters.includes(filter.key)) {
+                  e.target.style.backgroundColor = darkMode ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!selectedFilters.includes(filter.key)) {
+                  e.target.style.backgroundColor = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)';
+                }
+              }}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {loading && <p>Recherche en cours...</p>}
@@ -87,9 +157,11 @@ export default function MaterialPage() {
             </div>
           </article>
         ))}
-        {searchTerm && !loading && results.length === 0 && (
+        {!loading && results.length === 0 && (searchTerm || selectedFilters.length > 0) && (
           <div className="col-12">
-            <p className="text-muted text-center">Aucun résultat trouvé pour "{searchTerm}"</p>
+            <p className="text-muted text-center">
+              {searchTerm ? `Aucun résultat trouvé pour "${searchTerm}"` : 'Aucun résultat pour les filtres sélectionnés'}
+            </p>
           </div>
         )}
       </div>

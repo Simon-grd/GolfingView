@@ -1,16 +1,9 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useTheme } from '../contexts/ThemeContext';
 import logo from '../Logo_GolfingView.svg';
 
 export default function Header() {
-  const [darkMode, setDarkMode] = useState(false);
-
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-    document.body.style.background = darkMode 
-      ? 'linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%)'
-      : 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)';
-  };
+  const { darkMode, toggleTheme } = useTheme();
 
   return (
     <nav className="p-4 p-md-5 d-flex flex-column align-items-center position-relative overflow-hidden" style={{
@@ -72,7 +65,7 @@ export default function Header() {
         filter: 'blur(30px)'
       }}></div>
       
-      <div className="position-relative" style={{zIndex: 2}}>
+      <div className="position-relative d-flex flex-column align-items-center" style={{zIndex: 2}}>
         <img 
           src={logo} 
           alt="Logo" 
@@ -84,7 +77,7 @@ export default function Header() {
             animation: 'fadeIn 0.8s ease-in'
           }} 
         />
-        <div className="d-flex flex-column flex-md-row align-items-center justify-content-center position-relative" style={{gap: '25px', width: '100%'}}>
+        <div className="d-flex flex-column flex-md-row align-items-center justify-content-center" style={{gap: '25px'}}>
           <Link 
             className="text-decoration-none fw-bold fs-5 px-4 py-3 text-center" 
             style={{
@@ -105,7 +98,7 @@ export default function Header() {
             to="/"
             aria-label="Aller à la page d'accueil"
           >
-            🏌️ Accueil
+            Accueil
           </Link>
           <Link 
             className="text-decoration-none fw-bold fs-5 px-4 py-3 text-center" 
@@ -127,17 +120,37 @@ export default function Header() {
             to="/material"
             aria-label="Aller à la page Matériel et News"
           >
-            📰 Matériel & News
+            Matériel & News
+          </Link>
+          <Link 
+            className="text-decoration-none fw-bold fs-5 px-4 py-3 text-center" 
+            style={{
+              color: darkMode ? '#ffffff' : '#000000',
+              transition: 'all 0.3s ease',
+              borderRadius: '12px',
+              background: 'transparent',
+              border: '1px solid transparent'
+            }} 
+            onMouseEnter={(e) => {
+              e.target.style.background = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.08)';
+              e.target.style.border = darkMode ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(45,80,22,0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'transparent';
+              e.target.style.border = '1px solid transparent';
+            }}
+            to="/signup"
+            aria-label="Créer un compte"
+          >
+            Inscription
           </Link>
           
           {/* Theme toggle button - Mobile only */}
           <button
             onClick={toggleTheme}
-            className="d-md-none position-absolute"
+            className="d-md-none"
             aria-label={darkMode ? 'Activer le mode clair' : 'Activer le mode sombre'}
             style={{
-              top: '0',
-              right: '0',
               background: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(45,80,22,0.1)',
               border: darkMode ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(45,80,22,0.2)',
               borderRadius: '50%',
@@ -145,7 +158,8 @@ export default function Header() {
               height: '45px',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              fontSize: '20px'
+              fontSize: '20px',
+              marginLeft: 'auto'
             }}
             onMouseEnter={(e) => {
               e.target.style.transform = 'scale(1.1)';
