@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+# GolfingView 🏌️
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📋 Pitch du Projet
 
-## Available Scripts
+**Quoi ?** GolfingView est une application web moderne dédiée au monde du golf, offrant un accès centralisé aux compétitions, matériel et actualités du golf.
 
-In the project directory, you can run:
+**Pourquoi ?** Pour répondre au besoin des passionnés de golf d'avoir une plateforme unique regroupant toutes les informations essentielles : compétitions en cours, matériel professionnel, et golfeurs du moment.
 
-### `npm start`
+**Pour qui ?** 
+- Golfeurs amateurs et professionnels
+- Passionnés de golf cherchant à suivre les compétitions
+- Acheteurs de matériel de golf
+- Fans souhaitant suivre leurs golfeurs préférés
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🛠️ Stack Technique
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Frontend** : React 18 avec Hooks (useState, useEffect, useContext)
+- **Styling** : Bootstrap 5 + CSS personnalisé
+- **Routing** : React Router DOM
+- **API** : Sportbex API pour les données de golf en temps réel
+- **State Management** : Context API (ThemeContext, AuthContext)
+- **Icons** : Font Awesome
+- **Build Tool** : Create React App
 
-### `npm test`
+## 📚 Documentation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Section | Description | Lien |
+|---------|-------------|------|
+| 🚀 **Installation** | Guide d'installation et configuration | [📖 Voir le guide](docs/installation.md) |
+| 🏗️ **Architecture** | Structure technique et composants | [📖 Voir l'architecture](docs/architecture.md) |
+| 🌐 **API** | Endpoints et documentation API | [📖 Voir l'API](docs/api.md) |
+| 📱 **Fonctionnalités** | Description des features | [📖 Voir les fonctionnalités](docs/features.md) |
+| 📸 **Screenshots** | Captures d'écran mobile/desktop | [📖 Voir les captures](docs/screenshots.md) |
 
-### `npm run build`
+## 🚀 Démarrage Rapide
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+# 1. Cloner le projet
+git clone [url-du-repo]
+cd GolfingView
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# 2. Installer les dépendances
+npm install
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# 3. Configurer l'API
+cp .env.example .env
+# Éditer .env avec votre clé Sportbex API
 
-### `npm run eject`
+# 4. Lancer l'application
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🤝 Contribution
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Fork le projet
+2. Créez une branche feature (`git checkout -b feature/AmazingFeature`)
+3. Commit vos changements (`git commit -m 'Add AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrez une Pull Request
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📄 Licence
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
