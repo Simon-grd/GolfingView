@@ -3,21 +3,25 @@
 ## Desktop
 
 ### Page d'Accueil
-![Desktop Home](../screenshots/desktop-home.png)
+<img src="../screenshots/accueil_clair.png" width="600">
+
 *Page d'accueil - Vue desktop avec compétitions*
 
-### Page Matériel
-![Desktop Material](../screenshots/desktop-material.png)
-*Page matériel - Catalogue et filtres*
+### Page Matériel & News
+<img src="../screenshots/materiel_sombre.png" width="600">
+
+*Page matériel & news - Catalogue et filtres*
 
 ## Mobile
 
 ### Version Mobile
-![Mobile Home](../screenshots/mobile-home.png)
+<img src="../screenshots/IMG_2127.png" width="300">
+
 *Version mobile responsive*
 
 ### Menu Mobile
-![Mobile Menu](../screenshots/mobile-menu.png)
+<img src="../screenshots/IMG_2128.png" width="300">
+
 *Menu de navigation mobile*
 
 ## Responsive Design
