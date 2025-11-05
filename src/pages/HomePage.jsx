@@ -1,6 +1,44 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { fetchGolfCompetitions } from '../services/api';
+
+const CompetitionCard = memo(({ item, index, onSelect, darkMode }) => (
+  <article 
+    key={item.competition.id} 
+    className="col-12 col-sm-6 col-lg-4 mb-4" 
+    style={{animation: `fadeIn 0.6s ease-out ${index * 0.1}s forwards`, opacity: 0}}
+  >
+    <div 
+      className="card h-100 border-0 shadow-sm" 
+      style={{cursor: 'pointer', borderRadius: '15px'}} 
+      onClick={() => onSelect(item)}
+      role="button" 
+      tabIndex="0"
+      onKeyDown={(e) => e.key === 'Enter' && onSelect(item)}
+    >
+      <div className="card-body p-4">
+        <h5 className="card-title mb-3" style={{color: '#2d5016', fontWeight: '600', fontSize: '1.1rem'}}>
+          {item.competition.name}
+        </h5>
+        <div className="mb-3">
+          <p className="card-text text-muted mb-2 d-flex align-items-center">
+            <i className="fas fa-map-marker-alt me-2 text-danger" aria-hidden="true"></i>
+            <strong>{item.competitionRegion}</strong>
+          </p>
+          <p className="card-text mb-2 d-flex align-items-center">
+            <i className="fas fa-chart-line me-2 text-success" aria-hidden="true"></i>
+            {item.marketCount} marché{item.marketCount > 1 ? 's' : ''} disponible{item.marketCount > 1 ? 's' : ''}
+          </p>
+          <p className="card-text mb-0 d-flex align-items-center">
+            <i className="fas fa-golf-ball me-2 text-warning" aria-hidden="true"></i>
+            <small className="text-muted">Tournoi de golf</small>
+          </p>
+        </div>
+        <span className="badge bg-success px-3 py-2">Actif</span>
+      </div>
+    </div>
+  </article>
+));
 
 export default function HomePage() {
   const { darkMode } = useTheme();
@@ -99,28 +137,13 @@ export default function HomePage() {
       ) : (
         <div className="row">
           {competitions.length > 0 ? competitions.map((item, index) => (
-            <article key={item.competition.id} className="col-12 col-sm-6 col-lg-4 mb-4" style={{animation: `fadeIn 0.6s ease-out ${index * 0.1}s forwards`, opacity: 0}}>
-              <div className="card h-100 border-0 shadow-sm" style={{cursor: 'pointer', transition: 'all 0.3s', borderRadius: '15px'}} onClick={() => setSelectedCompetition(item)} onMouseEnter={(e) => {e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';}} onMouseLeave={(e) => {e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';}} role="button" tabIndex="0">
-                <div className="card-body p-4">
-                  <h5 className="card-title mb-3" style={{color: '#2d5016', fontWeight: '600', fontSize: '1.1rem'}}>{item.competition.name}</h5>
-                  <div className="mb-3">
-                    <p className="card-text text-muted mb-2 d-flex align-items-center">
-                      <i className="fas fa-map-marker-alt me-2 text-danger"></i>
-                      <strong>{item.competitionRegion}</strong>
-                    </p>
-                    <p className="card-text mb-2 d-flex align-items-center">
-                      <i className="fas fa-chart-line me-2 text-success"></i>
-                      {item.marketCount} marché{item.marketCount > 1 ? 's' : ''} disponible{item.marketCount > 1 ? 's' : ''}
-                    </p>
-                    <p className="card-text mb-0 d-flex align-items-center">
-                      <i className="fas fa-golf-ball me-2 text-warning"></i>
-                      <small className="text-muted">Tournoi de golf</small>
-                    </p>
-                  </div>
-                  <span className="badge bg-success px-3 py-2">Actif</span>
-                </div>
-              </div>
-            </article>
+            <CompetitionCard 
+              key={item.competition.id}
+              item={item}
+              index={index}
+              onSelect={setSelectedCompetition}
+              darkMode={darkMode}
+            />
           )) : (
             <div className="col-12">
               <p className="text-center text-muted">Aucune compétition trouvée ou erreur de chargement</p>
@@ -135,7 +158,13 @@ export default function HomePage() {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">{selectedCompetition.competition.name}</h5>
-                <button type="button" className="btn-close" onClick={() => setSelectedCompetition(null)}></button>
+                <button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={() => setSelectedCompetition(null)}
+                  aria-label="Fermer la modal"
+                  autoFocus
+                ></button>
               </div>
               <div className="modal-body">
                 <div className="row">

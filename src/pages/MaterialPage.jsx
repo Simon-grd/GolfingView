@@ -1,6 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 import { fetchGolfEquipment, fetchFamousGolfers } from '../services/api';
+
+const EquipmentCard = memo(({ item, index, onSelect }) => (
+  <article 
+    key={item.id} 
+    className="col-12 col-md-6 col-lg-4 mb-4" 
+    style={{animation: `fadeIn 0.5s ease-out ${index * 0.08}s forwards`, opacity: 0}}
+  >
+    <div 
+      className="card border-0 shadow-sm h-100" 
+      style={{cursor: 'pointer', borderRadius: '15px'}} 
+      onClick={() => onSelect(item)}
+      role="button"
+      tabIndex="0"
+      onKeyDown={(e) => e.key === 'Enter' && onSelect(item)}
+    >
+      <div className="card-body p-4">
+        <div className="d-flex justify-content-between align-items-start mb-3">
+          <span className="badge" style={{backgroundColor: '#2d5016', borderRadius: '20px', padding: '8px 15px'}}>
+            {item.category}
+          </span>
+          <span className="badge bg-success">{item.price}</span>
+        </div>
+        <h5 className="card-title" style={{color: '#2d5016', fontWeight: '600'}}>
+          {item.name}
+        </h5>
+        <p className="card-text text-muted mb-2">{item.description}</p>
+        <small className="text-muted">
+          <i className="fas fa-map-marker-alt me-1" aria-hidden="true"></i>
+          {item.region}
+        </small>
+      </div>
+    </div>
+  </article>
+));
 
 export default function MaterialPage() {
   const { darkMode } = useTheme();
@@ -170,6 +204,7 @@ export default function MaterialPage() {
           placeholder="Rechercher des informations..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          aria-label="Rechercher du matériel de golf"
         />
       </div>
 
@@ -234,21 +269,12 @@ export default function MaterialPage() {
       
       <div className="row">
         {results.map((item, index) => (
-          <article key={item.id} className="col-12 col-md-6 col-lg-4 mb-4" style={{animation: `fadeIn 0.5s ease-out ${index * 0.08}s forwards`, opacity: 0}}>
-            <div className="card border-0 shadow-sm h-100" style={{cursor: 'pointer', transition: 'all 0.3s', borderRadius: '15px'}} onClick={() => setSelectedArticle(item)} onMouseEnter={(e) => {e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';}} onMouseLeave={(e) => {e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';}}>
-              <div className="card-body p-4">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <span className="badge" style={{backgroundColor: '#2d5016', borderRadius: '20px', padding: '8px 15px'}}>{item.category}</span>
-                  <span className="badge bg-success">{item.price}</span>
-                </div>
-                <h5 className="card-title" style={{color: '#2d5016', fontWeight: '600'}}>{item.name}</h5>
-                <p className="card-text text-muted mb-2">{item.description}</p>
-                <small className="text-muted">
-                  <i className="fas fa-map-marker-alt me-1"></i>{item.region}
-                </small>
-              </div>
-            </div>
-          </article>
+          <EquipmentCard 
+            key={item.id}
+            item={item}
+            index={index}
+            onSelect={setSelectedArticle}
+          />
         ))}
         {!loading && results.length === 0 && (searchTerm || selectedFilters.length > 0) && (
           <div className="col-12">
@@ -265,7 +291,13 @@ export default function MaterialPage() {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">{selectedArticle.name || selectedArticle.title}</h5>
-                <button type="button" className="btn-close" onClick={() => setSelectedArticle(null)}></button>
+                <button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={() => setSelectedArticle(null)}
+                  aria-label="Fermer la modal"
+                  autoFocus
+                ></button>
               </div>
               <div className="modal-body">
                 <div className="d-flex justify-content-between align-items-center mb-3">
